@@ -1,93 +1,93 @@
-# Socket UI
+# SocketUI
 
+SocketUI is a remote control system that allows users to control TellUs applications from their smartphone over a local network.
 
+The system consists of a Python WebSocket backend server and a React-based frontend control panel.
 
-## Getting started
+## Project Structure
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- **`backend/`** - Python WebSocket server
+  - See [backend/README.md](backend/README.md) for build and deployment details
+- **`frontend/`** - Vite + React control panel
+  - See [frontend/README.md](frontend/README.md) for the complete UI configuration protocol and JSON message format
+- **`build.bat`** - Build script that compiles the frontend and bundles it with the backend for distribution
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## How to Use
 
-## Add your files
+Follow these steps to integrate SocketUI into your TellUs application:
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+1. Build SocketUI (see [How to build](#how-to-build))
 
+2. Run SocketUI.exe and open [http://localhost:7000/](http://localhost:7000/) in your browser
+
+3. Connect your application by creating a WebSocket connection to [ws://localhost:7000/ws](ws://localhost:7000/ws)
+
+4. Listen for `{"type": "request"}`. This is a request event sent by SocketUI whenever it loads or reconnects. It is requesting a config.
+
+5. Send a config event with the UI elements you want to display:
+
+   ```json
+   {
+   	"type": "config",
+   	"title": "My first config",
+   	"elements": [
+   		{
+   			"type": "button",
+   			"id": "my_button",
+   			"text": "Button",
+   			"hint_title": "My first button",
+   			"hint_text": "Description about the button."
+   		}
+   	]
+   }
+   ```
+
+6. Listen for `{ "type": "button", "id": "my_button" }` to handle user interactions. This event indicates that the button was pressed.
+
+For a complete reference of all supported UI elements, see [UI configuration protocol](frontend/README.md#ui-configuration-protocol).
+
+## How It Works
+
+<img src="./frontend/images/uml.png">
+
+SocketUI operates on a simple client-server model:
+
+1. **Backend** runs a WebSocket server on `ws://localhost:7000` that the TellUs application can connect to
+2. **Backend** also hosts the built frontend on `http://localhost:7000`, providing access to a control panel from any device on the same network
+3. **Frontend** listens for UI configuration messages from the TellUs application via WebSocket
+4. **TellUs application** sends JSON messages describing the UI elements it needs (buttons, sliders, dropdowns, switches, etc.)
+5. **Frontend** displays these UI elements on demand
+6. **User interactions** on the frontend send messages back to the TellUs application with information about what button was clicked, etc.
+
+This allows a guide to remotely control TellUs applications from their device.
+
+## How to build
+
+### Prerequisites
+
+- [Python](https://www.python.org/downloads/) with `fastapi` and `uvicorn` packages installed
+- Node.js and npm
+
+### Build Steps
+
+Run the `build.bat` script from the root directory:
+
+```batch
+build.bat
 ```
-cd existing_repo
-git remote add origin https://gitlab.liu.se/mange61/socket-ui.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+This script:
 
-- [ ] [Set up project integrations](https://gitlab.liu.se/mange61/socket-ui/-/settings/integrations)
+1. Builds the React frontend
+2. Moves the compiled frontend into the backend directory
+3. Packages everything with PyInstaller to create `backend/dist/SocketUI.exe`
+4. Creates `SocketUI.zip` for distribution
 
-## Collaborate with your team
+## Installation on TellUs Computer
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+1. **Build SocketUI** using `build.bat` (see above)
+2. **Move the zip** containing `SocketUI.exe` to `C:\` or another permanent location on the TellUs computer, then extract the zip
+3. **Add to Windows Startup** to ensure SocketUI runs automatically:
+   - Press `Win + R`, type `shell:startup`, and press Enter
+   - Create a shortcut to `SocketUI.exe` in the startup folder
+4. **SocketUI is now ready** - it will run in the background on port 7000 whenever a compatible TellUs application connects
