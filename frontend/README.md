@@ -1,6 +1,8 @@
 # SocketUI Frontend
 
-<img src="./images/example_ui.png" style="width: 300px; float: right; margin-left: 1rem;">
+<!-- <img src="./images/example_ui.png" style="width: 300px; float: right; margin-left: 1rem;"> -->
+
+<img src="./images/example_ui.png" alt="Example UI" width="300" align="right">
 
 The SocketUI frontend is a dynamic, real-time control panel built with **Vite**, **React**, and **Tailwind CSS**. It communicates with the TellUs application via WebSocket to receive UI configurations and send user interactions.
 
@@ -25,18 +27,21 @@ npm run build
 
 The compiled files will be output to the `dist/` folder (which gets bundled with the backend by `build.bat`).
 
-## How it works
+## Protocol
 
-The frontend follows a simple request-response flow:
+This section describes the complete JSON protocol used by SocketUI. There are 3 types of events:
 
-1. **Request** - When the frontend loads or reconnects, it sends a `request` event to the TellUs application
-2. **Config** - The TellUs application responds with a `config` event containing:
-   - A title for the control panel
-   - An array of UI elements to display
-3. **Display** - The frontend dynamically renders all the specified UI elements
-4. **Interact** - When the user interacts with an element (clicks a button, drags a slider, etc.), the frontend sends an event back with the element's ID and value
+### Request message
 
-## UI Configuration Protocol
+This message is sent by SocketUI upon connecting or refreshing. It
+
+> `{ "type": "request" }`
+
+### Config message
+
+### Button event message
+
+### Slider event message
 
 The frontend displays UI elements based on a configuration JSON sent from the TellUs application. Each element has:
 
@@ -45,26 +50,22 @@ The frontend displays UI elements based on a configuration JSON sent from the Te
 - Optional `hint_title` and `hint_text` fields that display descriptive text to the user
 - Element-specific configuration fields
 
+## UI elements
+
 ### Button
 
-A clickable button element.
-
-**Config:**
+<img src="./images/button.png" alt="Button element" align="right">
 
 ```typescript
 {
   type: "button",
-  id: string,
-  text: string,
-  hint_title?: string,
-  hint_text?: string,
-  color?: string
+  id: string, // Unique element id
+  text: string, // The button text
+  hint_title?: string, // Optional title about usage
+  hint_text?: string, // Optional description about usage
+  color?: string // Optional button color ("#FFFFFF")
 }
 ```
-
-- `text` - The label displayed on the button
-- `color` - (Optional) CSS color value for the button (e.g., `"#ff0000"` or `"red"`)
-- `hint_title` and `hint_text` - (Optional) Descriptive text displayed to the left of the button to explain its function
 
 **Interaction:**
 When clicked, sends:
@@ -72,7 +73,7 @@ When clicked, sends:
 ```typescript
 {
   type: "button",
-  id: string
+  id: string // Unique element id
 }
 ```
 

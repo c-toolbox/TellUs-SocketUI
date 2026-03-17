@@ -12,19 +12,19 @@ The system consists of a Python WebSocket backend server and a React-based front
   - See [frontend/README.md](frontend/README.md) for the complete UI configuration protocol and JSON message format
 - **`build.bat`** - Build script that compiles the frontend and bundles it with the backend for distribution
 
-## How to Use
+## Quick start
 
 Follow these steps to integrate SocketUI into your TellUs application:
 
-1. Build SocketUI (see [How to build](#how-to-build))
+1. Build SocketUI (see [how to build](#how-to-build))
 
 2. Run SocketUI.exe and open [http://localhost:7000/](http://localhost:7000/) in your browser
 
 3. Connect your application by creating a WebSocket connection to [ws://localhost:7000/ws](ws://localhost:7000/ws)
 
-4. Listen for `{ "type": "request" }`. This is a request event sent by SocketUI whenever it loads or reconnects. It is requesting a config.
+4. Listen for `{ "type": "request" }`. This [request message](frontend/README.md#request-message) is sent by SocketUI whenever it loads or reconnects, requesting a config.
 
-5. Send a config event with the UI elements you want to display:
+5. Send a [config message](frontend/README.md#config-message) with the UI elements you want to display:
 
    ```json
    {
@@ -42,9 +42,9 @@ Follow these steps to integrate SocketUI into your TellUs application:
    }
    ```
 
-6. Listen for `{ "type": "button", "id": "my_button" }` to handle user interactions. This event indicates that the button was pressed.
+6. Listen for `{ "type": "button", "id": "my_button" }` to handle user interactions. This [button event message](frontend/README.md#button-event-message) indicates that the button was pressed.
 
-For a complete reference of all supported UI elements, see [UI configuration protocol](frontend/README.md#ui-configuration-protocol).
+For a complete reference of all supported UI elements, see the [frontend protocol](frontend/README.md#protocol).
 
 ## How it works
 
