@@ -22,7 +22,7 @@ Follow these steps to integrate SocketUI into your TellUs application:
 
 3. Connect your application by creating a WebSocket connection to [ws://localhost:7000/ws](ws://localhost:7000/ws)
 
-4. Listen for `{"type": "request"}`. This is a request event sent by SocketUI whenever it loads or reconnects. It is requesting a config.
+4. Listen for `{ "type": "request" }`. This is a request event sent by SocketUI whenever it loads or reconnects. It is requesting a config.
 
 5. Send a config event with the UI elements you want to display:
 
@@ -46,20 +46,27 @@ Follow these steps to integrate SocketUI into your TellUs application:
 
 For a complete reference of all supported UI elements, see [UI configuration protocol](frontend/README.md#ui-configuration-protocol).
 
-## How It Works
+## How it works
 
-<img src="./frontend/images/uml.png">
+<img src="./frontend/images/new_uml.png">
 
-SocketUI operates on a simple client-server model:
+**Connecting**
 
-1. **Backend** runs a WebSocket server on `ws://localhost:7000` that the TellUs application can connect to
-2. **Backend** also hosts the built frontend on `http://localhost:7000`, providing access to a control panel from any device on the same network
-3. **Frontend** listens for UI configuration messages from the TellUs application via WebSocket
-4. **TellUs application** sends JSON messages describing the UI elements it needs (buttons, sliders, dropdowns, switches, etc.)
-5. **Frontend** displays these UI elements on demand
-6. **User interactions** on the frontend send messages back to the TellUs application with information about what button was clicked, etc.
+1. **Start app**: The TellUs application connects a WebSocket to <ws://localhost:7000/ws>, which connects it to the SocketUI backend.
 
-This allows a guide to remotely control TellUs applications from their device.
+2. **Open website**: A mobile device, connected to the TellUs wifi, opens <http://localhost:7000> in a web browser. The frontend connects to the backend the same way, then sends a [request message](frontend/README.md#request-message) to the backend, which passes it along to the TellUs application.
+
+3. **Prepare config**: The TellUs application sends a [config message](frontend/README.md#config-message), describing the UI elements it needs (buttons, sliders, dropdowns, switches, etc.)
+
+4. **Render HTML**: The frontend receives the config and updates the webpage to display the specified UI elements.
+
+**Interacting**
+
+1. **Click button**: When the user clicks a button that was specified in the config, the frontend sends a [button event message](frontend/README.md#button-event-message) that includes the button id.
+
+2. **Drag slider**: When the user drags a slider, the frontend sends a [slider event message](frontend/README.md#slider-event-message) that includes the slider id and the slider value.
+
+3. **Action**: The TellUs application receives the event and can perform a specific action based on the button or slider id.
 
 ## How to build
 

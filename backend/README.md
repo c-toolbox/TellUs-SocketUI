@@ -14,14 +14,24 @@ The TellUs application and SocketUI frontend connect to the same WebSocket endpo
 ## Prerequisites
 
 - Python 3.8 or higher
-- FastAPI: `pip install fastapi`
-- Uvicorn: `pip install uvicorn`
+- Python packages FastAPI and Uvicorn:
+    - Install with `python -m pip install fastapi uvicorn`
 
-## Running for development
+## How to run locally
 
-To run the backend directly for testing:
+Build the frontend and move the dist to backend. This is so the server can host it.
 
 ```bash
+cd frontend
+npm install
+npm run build
+mv dist ../backend/dist
+```
+
+Next, run the backend server.
+
+```bash
+cd backend
 python server.py
 ```
 

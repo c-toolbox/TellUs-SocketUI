@@ -4,9 +4,7 @@
 
 The SocketUI frontend is a dynamic, real-time control panel built with **Vite**, **React**, and **Tailwind CSS**. It communicates with the TellUs application via WebSocket to receive UI configurations and send user interactions.
 
-## Getting Started
-
-### Development
+## How to run locally
 
 To run the frontend in development mode:
 
@@ -27,7 +25,7 @@ npm run build
 
 The compiled files will be output to the `dist/` folder (which gets bundled with the backend by `build.bat`).
 
-## How It Works
+## How it works
 
 The frontend follows a simple request-response flow:
 
