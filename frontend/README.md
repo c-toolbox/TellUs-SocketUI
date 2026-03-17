@@ -1,7 +1,5 @@
 # SocketUI Frontend
 
-<img src="./images/example_ui.png" alt="Example UI" width="200" align="right">
-
 The SocketUI frontend is a dynamic, real-time control panel built with **Vite**, **React**, and **Tailwind CSS**. It communicates with the TellUs application via WebSocket to receive UI configurations and send user interactions.
 
 ## Protocol
@@ -14,7 +12,7 @@ A **request message** is sent by SocketUI frontend upon connecting or refreshing
 
 ```jsonc
 {
-	"type": "request"
+	"type": "request",
 }
 ```
 
@@ -49,7 +47,7 @@ In event messages, the `type` and `id` properties correspond to the type and id 
 {
 	"type": "dropdown", // The type of UI element interacted with
 	"id": "favorite_fruit", // Unique element id
-	"value": "Apple" // Dropdown returns a string value
+	"value": "Apple", // Dropdown returns a string value
 }
 ```
 
@@ -70,7 +68,7 @@ Each element requires a unique `id` to track interactions.
 	"text": "Button",
 	"hint_title": "Button title", // Optional
 	"hint_text": "Description about the button", // Optional
-	"color": "#ffffff" // Optional
+	"color": "#ffffff", // Optional
 }
 ```
 
@@ -81,7 +79,7 @@ When a button is clicked, SocketUI sends:
 ```jsonc
 {
 	"type": "button",
-	"id": "my_button"
+	"id": "my_button",
 }
 ```
 
@@ -96,7 +94,7 @@ When a button is clicked, SocketUI sends:
 	"value": true,
 	"hint_title": "Switch title", // Optional
 	"hint_text": "Description about the switch", // Optional
-	"color": "#ffffff" // Optional
+	"color": "#ffffff", // Optional
 }
 ```
 
@@ -108,7 +106,7 @@ When toggled, SocketUI sends:
 {
 	"type": "switch",
 	"id": "my_switch",
-	"value": true // Switch state
+	"value": true, // Switch state
 }
 ```
 
@@ -124,7 +122,7 @@ When toggled, SocketUI sends:
 	"value": "Option 1",
 	"hint_title": "Dropdown title", // Optional
 	"hint_text": "Description about the dropdown", // Optional
-	"color": "#ffffff" // Optional
+	"color": "#ffffff", // Optional
 }
 ```
 
@@ -136,7 +134,7 @@ When the selection changes, SocketUI sends:
 {
 	"type": "dropdown",
 	"id": "my_dropdown",
-	"value": "Option 1" // Dropdown selection
+	"value": "Option 1", // Dropdown selection
 }
 ```
 
@@ -154,7 +152,7 @@ When the selection changes, SocketUI sends:
 	"step": 1, // Optional
 	"hint_title": "Slider title", // Optional
 	"hint_text": "Description about the slider", // Optional
-	"color": "#ffffff" // Optional
+	"color": "#ffffff", // Optional
 }
 ```
 
@@ -166,11 +164,13 @@ When the slider is moved, SocketUI sends:
 {
 	"type": "slider",
 	"id": "my_slider",
-	"value": 50 // Slider value
+	"value": 50, // Slider value
 }
 ```
 
 ### Ratio slider element
+
+The ratio slider element is a multi-slider, allowing you to specify the ratio between multiple values. The total is always preserved when moving the slider knobs.
 
 <img src="./images/ratio_slider.png" alt="Ratio slider element" align="right" width="350">
 
@@ -191,8 +191,6 @@ When the slider is moved, SocketUI sends:
 }
 ```
 
-The ratio slider element is a multi-slider, allowing you to specify the ratio between multiple values. The total is always preserved when moving the slider knobs.
-
 #### Ratio Slider event message
 
 When a knob is dragged, SocketUI sends:
@@ -201,11 +199,13 @@ When a knob is dragged, SocketUI sends:
 {
 	"type": "ratio_slider",
 	"id": "my_ratio_slider",
-	"values": [10, 20, 30, 40] // Ratio values, same order as in `values` array
+	"values": [10, 20, 30, 40], // Ratio values, same order as in `values` array
 }
 ```
 
 ### Text element
+
+Text elements can be used to send feedback to the user about the state of the TellUs application.
 
 <img src="./images/text.png" alt="Text element" align="right" width="350">
 
@@ -214,15 +214,15 @@ When a knob is dragged, SocketUI sends:
 	"type": "text",
 	"id": "my_text",
 	"hint_title": "Text title", // Optional
-	"hint_text": "Text content" // Optional
+	"hint_text": "Text content", // Optional
 }
 ```
-
-Text elements can be used to send feedback to the user about the state of the TellUs application.
 
 Text elements are non-interactive and do not send any events.
 
 ### HR element
+
+HR elements can be used to add separation between sections of UI elements.
 
 <img src="./images/hr.png" alt="HR element" align="right" width="350">
 
@@ -230,15 +230,15 @@ Text elements are non-interactive and do not send any events.
 {
 	"type": "hr",
 	"id": "my_hr",
-	"hint_title": "Section label" // Optional label
+	"hint_title": "Section label", // Optional label
 }
 ```
-
-HR elements can be used to add separation between sections of UI elements.
 
 HR elements are non-interactive and do not send any events.
 
 ### Grid element
+
+Grid elements are layout containers that arrange other UI elements in a grid with a specified number of columns. Any previously mentioned element type can be nested inside a grid, including other grids.
 
 <img src="./images/grid.png" alt="Grid element" align="right" width="350">
 
@@ -254,8 +254,6 @@ HR elements are non-interactive and do not send any events.
 	]
 }
 ```
-
-Grid elements are layout containers that arrange other UI elements in a grid with a specified number of columns. Any previously mentioned element type can be nested inside a grid, including other grids.
 
 Grid elements are non-interactive and do not send any events.
 
