@@ -1,4 +1,5 @@
 import { UiButtonConfig, UiButtonEvent } from "./components/Button";
+import { UiColorConfig, UiColorEvent } from "./components/Color";
 import { UiDropdownConfig, UiDropdownEvent } from "./components/Dropdown";
 import { UiGridConfig } from "./components/Grid";
 import { UiHrConfig } from "./components/Hr";
@@ -9,6 +10,7 @@ import { UiTextConfig } from "./components/Text";
 
 export type UiElement =
 	| UiButtonConfig
+	| UiColorConfig
 	| UiDropdownConfig
 	| UiHrConfig
 	| UiRatioSliderConfig
@@ -29,6 +31,7 @@ export interface UiRequestEvent {
 
 export type UiUpdateEvent =
 	| UiButtonEvent
+	| UiColorEvent
 	| UiDropdownEvent
 	| UiRatioSliderEvent
 	| UiSliderEvent

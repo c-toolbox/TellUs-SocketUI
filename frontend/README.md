@@ -24,14 +24,14 @@ See [UI elements](#ui-elements) for more details about all available elements an
 
 ```jsonc
 {
-    "type": "config",
-    "title": "My config", // Optional title at the top
-    "elements": [
-        { "type": "button", "id": "start_button", ... }, // See button element
-        { "type": "slider", "id": "size_slider", ... }, // See slider element
-        { "type": "dropdown", "id": "favorite_fruit", ... }, // See dropdown element
-        ...
-    ]
+	"type": "config",
+	"title": "My config", // Optional title at the top
+	"elements": [
+		{ "type": "button", "id": "start_button", ... }, // See button element
+		{ "type": "slider", "id": "size_slider", ... }, // See slider element
+		{ "type": "dropdown", "id": "favorite_fruit", ... }, // See dropdown element
+		...
+	]
 }
 ```
 
@@ -144,6 +144,34 @@ When the selection changes, SocketUI sends:
 
 ---
 
+### Color picker element
+
+<img src="./images/color.png" alt="Color picker element" align="right" width="350">
+
+```jsonc
+{
+	"type": "color",
+	"id": "my_color",
+	"value": "#ff0000", // Hex color
+	"hint_title": "Color title", // Optional
+	"hint_text": "Description about the color", // Optional
+}
+```
+
+#### Color event message
+
+When the color changes, SocketUI sends:
+
+```jsonc
+{
+	"type": "color",
+	"id": "my_color",
+	"value": "#00ff00", // Color value as hex
+}
+```
+
+---
+
 ### Slider element
 
 <img src="./images/slider.png" alt="Slider element" align="right" width="350">
@@ -188,11 +216,11 @@ The ratio slider element is a multi-slider, allowing you to specify the ratio be
 	"id": "my_ratio_slider",
 	"values": [
 		{
-            "name": "Blue",
-            "value": 10,
-            "color": "#2563eb"
-        },
-        ...
+			"name": "Blue",
+			"value": 10,
+			"color": "#2563eb"
+		},
+		...
 	],
 	"hint_title": "Ratio title", // Optional
 	"hint_text": "Description about the ratio slider" // Optional
@@ -264,7 +292,7 @@ Grid elements are layout containers that arrange other UI elements in a grid wit
 	"elements": [
 		{ "type": "button", ... },
 		{ "type": "slider", ... },
-        ...
+		...
 	]
 }
 ```
