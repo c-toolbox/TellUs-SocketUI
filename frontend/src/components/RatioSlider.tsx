@@ -68,31 +68,42 @@ export function UiRatioSlider(
 			if (!sliderRef.current) return;
 
 			const rect = sliderRef.current.getBoundingClientRect();
-			const clientX = ev.clientX;
 
-			const percent = (clientX - rect.left) / rect.width;
+			const percent = Math.max(
+				0,
+				Math.min(1, (ev.clientX - rect.left) / rect.width),
+			);
 			let pos = Math.round(percent * total);
+			pos = Math.max(MIN, Math.min(total - MIN, pos));
 
 			setHandles((prev) => {
 				const next = [...prev];
 
 				next[index] = pos;
 
-				// Push right
+				// Push other handles right
 				for (let i = index + 1; i < next.length; i++) {
 					const minPos = next[i - 1] + MIN;
 					if (next[i] < minPos) next[i] = minPos;
 				}
 
-				// Push left
+				// Push back from right edge
+				for (let i = next.length - 1; i >= index; i--) {
+					const maxPos = i == next.length - 1 ? total - MIN : next[i + 1] - MIN;
+					if (next[i] > maxPos) next[i] = maxPos;
+				}
+
+				// Push other handles left
 				for (let i = index - 1; i >= 0; i--) {
 					const maxPos = next[i + 1] - MIN;
 					if (next[i] > maxPos) next[i] = maxPos;
 				}
 
-				// Boundaries
-				if (next[0] < MIN) return prev;
-				if (next[next.length - 1] > total - MIN) return prev;
+				// Push back from left edge
+				for (let i = 0; i <= index; i++) {
+					const minPos = i == 0 ? MIN : next[i - 1] + MIN;
+					if (next[i] < minPos) next[i] = minPos;
+				}
 
 				if (next.every((v, i) => v === prev[i])) return prev;
 
@@ -144,7 +155,7 @@ export function UiRatioSlider(
 					<div
 						key={i}
 						onPointerDown={(e) => startDrag(i, e)}
-						className="absolute top-0 w-5 h-8 -mt-1 bg-white rounded-md cursor-ew-resize"
+						className="absolute top-0 w-5 h-8 -mt-1 bg-white rounded-md cursor-ew-resize shadow"
 						style={{ left: `calc(${(pos / total) * 100}% - 8px)` }}
 					/>
 				))}
