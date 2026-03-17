@@ -210,7 +210,10 @@ function getComponent(element: UiElement, sendData: (data: UiEvent) => void) {
 			return (
 				<UiGrid key={element.id} {...element}>
 					{element.elements.map((element: UiElement) => (
-						<div className="border border-zinc-700 rounded-lg p-3">
+						<div
+							key={element.id}
+							className="border border-zinc-700 rounded-lg p-3"
+						>
 							{getComponent(element, sendData)}
 						</div>
 					))}

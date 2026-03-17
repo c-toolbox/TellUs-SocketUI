@@ -60,15 +60,17 @@ export function UiRatioSlider(
 						total - handles[handles.length - 1],
 					];
 
-	const startDrag = (index: number, e: React.MouseEvent<HTMLDivElement>) => {
+	const startDrag = (index: number, e: React.PointerEvent<HTMLDivElement>) => {
 		e.preventDefault();
+		(e.target as HTMLElement).setPointerCapture(e.pointerId);
 
-		const move = (ev: MouseEvent) => {
+		const move = (ev: PointerEvent) => {
 			if (!sliderRef.current) return;
 
 			const rect = sliderRef.current.getBoundingClientRect();
-			const percent = (ev.clientX - rect.left) / rect.width;
+			const clientX = ev.clientX;
 
+			const percent = (clientX - rect.left) / rect.width;
 			let pos = Math.round(percent * total);
 
 			setHandles((prev) => {
@@ -79,24 +81,19 @@ export function UiRatioSlider(
 				// Push right
 				for (let i = index + 1; i < next.length; i++) {
 					const minPos = next[i - 1] + MIN;
-					if (next[i] < minPos) {
-						next[i] = minPos;
-					}
+					if (next[i] < minPos) next[i] = minPos;
 				}
 
 				// Push left
 				for (let i = index - 1; i >= 0; i--) {
 					const maxPos = next[i + 1] - MIN;
-					if (next[i] > maxPos) {
-						next[i] = maxPos;
-					}
+					if (next[i] > maxPos) next[i] = maxPos;
 				}
 
-				// Check boundaries
+				// Boundaries
 				if (next[0] < MIN) return prev;
 				if (next[next.length - 1] > total - MIN) return prev;
 
-				// Skip if unchanged
 				if (next.every((v, i) => v === prev[i])) return prev;
 
 				const newSegments = [
@@ -112,12 +109,12 @@ export function UiRatioSlider(
 		};
 
 		const stop = () => {
-			window.removeEventListener("mousemove", move);
-			window.removeEventListener("mouseup", stop);
+			window.removeEventListener("pointermove", move);
+			window.removeEventListener("pointerup", stop);
 		};
 
-		window.addEventListener("mousemove", move);
-		window.addEventListener("mouseup", stop);
+		window.addEventListener("pointermove", move);
+		window.addEventListener("pointerup", stop);
 	};
 
 	return (
@@ -129,7 +126,10 @@ export function UiRatioSlider(
 				</div>
 			</div>
 
-			<div ref={sliderRef} className="mt-2 relative flex h-8 rounded">
+			<div
+				ref={sliderRef}
+				className="mt-2 relative flex h-6 rounded touch-none"
+			>
 				{segments.map((seg, i) => (
 					<div
 						key={i}
@@ -143,8 +143,8 @@ export function UiRatioSlider(
 				{handles.map((pos, i) => (
 					<div
 						key={i}
-						onMouseDown={(e) => startDrag(i, e)}
-						className="absolute top-0 w-4 h-8 bg-white border border-gray-400 rounded cursor-ew-resize"
+						onPointerDown={(e) => startDrag(i, e)}
+						className="absolute top-0 w-5 h-8 -mt-1 bg-white rounded-md cursor-ew-resize"
 						style={{ left: `calc(${(pos / total) * 100}% - 8px)` }}
 					/>
 				))}
@@ -157,7 +157,8 @@ export function UiRatioSlider(
 							className="w-4 h-4 mx-auto mb-1 rounded"
 							style={{ backgroundColor: props.values[i]?.color }}
 						/>
-						{props.values[i]?.name} {v}
+						{props.values[i]?.name}
+						<span className="opacity-60">:</span> {v}
 					</div>
 				))}
 			</div>
