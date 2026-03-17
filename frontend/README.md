@@ -39,9 +39,7 @@ See [UI elements](#ui-elements) for more details about all available elements an
 
 When an element is interacted with, SocketUI sends an event message matching the type of the UI element. For instance, clicking a button element results in a button event message.
 
-The `type` and `id` properties in an event message matches the type and id of an element in the config. The `value` property is provided for UI elements that can be modified, such as a slider with a number value or a dropdown with a string value.
-
-In event messages, the `type` and `id` properties correspond to the type and id of an element in the config. The `value` property is included for modifiable elements and its type depents on the type of element. A slider has a numeric value, a dropdown has a string value, a switch has a boolean value.
+The `type` and `id` properties in an event message matches the type and id of an element in the config. The `value` property is provided for UI elements that can be modified, such as a slider with a numeric value or a dropdown with a string value.
 
 ```jsonc
 {
@@ -53,9 +51,11 @@ In event messages, the `type` and `id` properties correspond to the type and id 
 
 ## UI elements
 
-This is a list of all UI components that can go into the [config message](#config-message) elements list.
+This section lists all UI elements allowed in the [config message](#config-message) elements list.
 
 Each element requires a unique `id` to track interactions.
+
+---
 
 ### Button element
 
@@ -82,6 +82,8 @@ When a button is clicked, SocketUI sends:
 	"id": "my_button",
 }
 ```
+
+---
 
 ### Switch element
 
@@ -110,6 +112,8 @@ When toggled, SocketUI sends:
 }
 ```
 
+---
+
 ### Dropdown element
 
 <img src="./images/dropdown.png" alt="Dropdown element" align="right" width="350">
@@ -137,6 +141,8 @@ When the selection changes, SocketUI sends:
 	"value": "Option 1", // Dropdown selection
 }
 ```
+
+---
 
 ### Slider element
 
@@ -167,6 +173,8 @@ When the slider is moved, SocketUI sends:
 	"value": 50, // Slider value
 }
 ```
+
+---
 
 ### Ratio slider element
 
@@ -203,6 +211,8 @@ When a knob is dragged, SocketUI sends:
 }
 ```
 
+---
+
 ### Text element
 
 Text elements can be used to send feedback to the user about the state of the TellUs application.
@@ -220,6 +230,8 @@ Text elements can be used to send feedback to the user about the state of the Te
 
 Text elements are non-interactive and do not send any events.
 
+---
+
 ### HR element
 
 HR elements can be used to add separation between sections of UI elements.
@@ -235,6 +247,8 @@ HR elements can be used to add separation between sections of UI elements.
 ```
 
 HR elements are non-interactive and do not send any events.
+
+---
 
 ### Grid element
 
