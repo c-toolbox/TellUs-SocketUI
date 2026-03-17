@@ -1,18 +1,16 @@
 # SocketUI
 
-SocketUI is a remote control system that allows users to control TellUs applications from their smartphone over a local network.
+<img src="./frontend/images/overview.png" alt="SocketUI on the left controlling settings in a TellUs paint application">
 
-The system consists of a Python WebSocket backend server and a React-based frontend control panel.
+SocketUI is a remote control system that allows users to control TellUs applications from their smartphone over a local network.
 
 ## Project Structure
 
-- **`backend/`** - Python WebSocket server
-  - See [backend/README.md](backend/README.md) for build and deployment details
-- **`frontend/`** - Vite + React control panel
-  - See [frontend/README.md](frontend/README.md) for the complete UI configuration protocol and JSON message format
-- **`build.bat`** - Build script that compiles the frontend and bundles it with the backend for distribution
+- **[Backend](backend/README.md)** - Python WebSocket server + HTTP server for frontend
+- **[Frontend](frontend/README.md)** - Vite + React control panel. The [UI configuration protocol](frontend/README.md#protocol) is specified here
+- **build.bat** - Build script that bundles the frontend and backend into an exe
 
-## Quick start
+## How to use in your application
 
 Follow these steps to integrate SocketUI into your TellUs application:
 
@@ -24,31 +22,15 @@ Follow these steps to integrate SocketUI into your TellUs application:
 
 4. Listen for `{ "type": "request" }`. This [request message](frontend/README.md#request-message) is sent by SocketUI whenever it loads or reconnects, requesting a config.
 
-5. Send a [config message](frontend/README.md#config-message) with the UI elements you want to display:
+5. Send `{ "type": "config", "title": "My config", "elements": [{ "type": "button", "id": "my_button", "text": "Click me" }] }`. This [config message](frontend/README.md#config-message) specifies the UI elements you want to display.
 
-   ```json
-   {
-   	"type": "config",
-   	"title": "My first config",
-   	"elements": [
-   		{
-   			"type": "button",
-   			"id": "my_button",
-   			"text": "Button",
-   			"hint_title": "My first button",
-   			"hint_text": "Description about the button."
-   		}
-   	]
-   }
-   ```
+6. Listen for `{ "type": "button", "id": "my_button" }` to handle user interactions. This [button event message](frontend/README.md#event-message) indicates that the button was pressed.
 
-6. Listen for `{ "type": "button", "id": "my_button" }` to handle user interactions. This [button event message](frontend/README.md#button-event-message) indicates that the button was pressed.
-
-For a complete reference of all supported UI elements, see the [frontend protocol](frontend/README.md#protocol).
+For a complete reference of all supported UI elements, see the [UI configuration protocol](frontend/README.md#protocol).
 
 ## How it works
 
-<img src="./frontend/images/new_uml.png">
+<img src="./frontend/images/new_uml.png" alt="Diagram of WebSocket traffic">
 
 **Connecting**
 
@@ -77,11 +59,7 @@ For a complete reference of all supported UI elements, see the [frontend protoco
 
 ### Build Steps
 
-Run the `build.bat` script from the root directory:
-
-```batch
-build.bat
-```
+Run the `build.bat` script in a terminal from the root directory.
 
 This script:
 

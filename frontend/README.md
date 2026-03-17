@@ -1,10 +1,263 @@
 # SocketUI Frontend
 
-<!-- <img src="./images/example_ui.png" style="width: 300px; float: right; margin-left: 1rem;"> -->
-
-<img src="./images/example_ui.png" alt="Example UI" width="300" align="right">
+<img src="./images/example_ui.png" alt="Example UI" style="width: 200px; float: right; margin-left: 1rem;">
 
 The SocketUI frontend is a dynamic, real-time control panel built with **Vite**, **React**, and **Tailwind CSS**. It communicates with the TellUs application via WebSocket to receive UI configurations and send user interactions.
+
+## Protocol
+
+This section describes the complete JSON protocol used by SocketUI. There are 3 types of messages: [request](#request-message), [config](#config-message), [event](#event-message).
+
+### Request message
+
+A **request message** is sent by SocketUI frontend upon connecting or refreshing. The message gets sent to the TellUs application, requesting it to send a **config message** back.
+
+```json
+{
+	"type": "request"
+}
+```
+
+### Config message
+
+A **config message** is sent by the TellUs application to specify what UI elements to display on the SocketUI frontend.
+
+See [UI elements](#ui-elements) for more details about all available elements and their configuration.
+
+```json
+{
+    "type": "config",
+    "title": "My config", // Optional title at the top
+    "elements": [
+        { "type": "button", "id": "start_button", ... }, // See button element
+        { "type": "slider", "id": "size_slider", ... }, // See slider element
+        { "type": "dropdown", "id": "favorite_fruit", ... }, // See dropdown element
+        ...
+    ]
+}
+```
+
+### Event message
+
+When an element is interacted with, SocketUI sends an event message matching the type of the UI element. For instance, clicking a button element results in a button event message.
+
+The `type` and `id` properties in an event message matches the type and id of an element in the config. The `value` property is provided for UI elements that can be modified, such as a slider with a number value or a dropdown with a string value.
+
+In event messages, the `type` and `id` properties correspond to the type and id of an element in the config. The `value` property is included for modifiable elements and its type depents on the type of element. A slider has a numeric value, a dropdown has a string value, a switch has a boolean value.
+
+```json
+{
+	"type": "dropdown", // The type of UI element interacted with
+	"id": "favorite_fruit", // Unique element id
+	"value": "Apple" // Dropdown returns a string value
+}
+```
+
+## UI elements
+
+This is a list of all UI components that can go into the [config message](#config-message) elements list.
+
+Each element requires a unique `id` to track interactions.
+
+### Button element
+
+<img src="./images/button.png" alt="Button element" align="right" width="350">
+
+```json
+{
+	"type": "button",
+	"id": "my_button",
+	"text": "Button",
+	"hint_title": "Button title", // Optional
+	"hint_text": "Description about the button", // Optional
+	"color": "#ffffff" // Optional
+}
+```
+
+#### Button event message
+
+When a button is clicked, SocketUI sends:
+
+```json
+{
+	"type": "button",
+	"id": "my_button"
+}
+```
+
+### Switch element
+
+<img src="./images/switch.png" alt="Switch element" align="right" width="350">
+
+```json
+{
+	"type": "switch",
+	"id": "my_switch",
+	"value": true,
+	"hint_title": "Switch title", // Optional
+	"hint_text": "Description about the switch", // Optional
+	"color": "#ffffff" // Optional
+}
+```
+
+#### Switch event message
+
+When toggled, SocketUI sends:
+
+```json
+{
+	"type": "switch",
+	"id": "my_switch",
+	"value": true // Switch state
+}
+```
+
+### Dropdown element
+
+<img src="./images/dropdown.png" alt="Dropdown element" align="right" width="350">
+
+```json
+{
+	"type": "dropdown",
+	"id": "my_dropdown",
+	"options": ["Option 1", "Option 2", "Option 3"],
+	"value": "Option 1",
+	"hint_title": "Dropdown title", // Optional
+	"hint_text": "Description about the dropdown", // Optional
+	"color": "#ffffff" // Optional
+}
+```
+
+#### Dropdown event message
+
+When the selection changes, SocketUI sends:
+
+```json
+{
+	"type": "dropdown",
+	"id": "my_dropdown",
+	"value": "Option 1" // Dropdown selection
+}
+```
+
+### Slider element
+
+<img src="./images/slider.png" alt="Slider element" align="right" width="350">
+
+```json
+{
+	"type": "slider",
+	"id": "my_slider",
+	"value": 50,
+	"min": 0,
+	"max": 100,
+	"step": 1, // Optional
+	"hint_title": "Slider title", // Optional
+	"hint_text": "Description about the slider", // Optional
+	"color": "#ffffff" // Optional
+}
+```
+
+#### Slider event message
+
+When the slider is moved, SocketUI sends:
+
+```json
+{
+	"type": "slider",
+	"id": "my_slider",
+	"value": 50 // Slider value
+}
+```
+
+### Ratio slider element
+
+<img src="./images/ratio_slider.png" alt="Ratio slider element" align="right" width="350">
+
+```json
+{
+	"type": "ratio_slider",
+	"id": "my_ratio_slider",
+	"values": [
+		{
+            "name": "Blue",
+            "value": 10,
+            "color": "#2563eb"
+        },
+        ...
+	],
+	"hint_title": "Ratio title", // Optional
+	"hint_text": "Description about the ratio slider" // Optional
+}
+```
+
+The ratio slider element is a multi-slider, allowing you to specify the ratio between multiple values. The total is always preserved when moving the slider knobs.
+
+#### Ratio Slider event message
+
+When a knob is dragged, SocketUI sends:
+
+```json
+{
+	"type": "ratio_slider",
+	"id": "my_ratio_slider",
+	"values": [10, 20, 30, 40] // Ratio values, same order as in `values` array
+}
+```
+
+### Text element
+
+<img src="./images/text.png" alt="Text element" align="right" width="350">
+
+```json
+{
+	"type": "text",
+	"id": "my_text",
+	"hint_title": "Text title", // Optional
+	"hint_text": "Text content" // Optional
+}
+```
+
+Text elements can be used to send feedback to the user about the state of the TellUs application.
+
+Text elements are non-interactive and do not send any events.
+
+### HR element
+
+<img src="./images/hr.png" alt="HR element" align="right" width="350">
+
+```json
+{
+	"type": "hr",
+	"id": "my_hr",
+	"hint_title": "Section label" // Optional label
+}
+```
+
+HR elements can be used to add separation between sections of UI elements.
+
+HR elements are non-interactive and do not send any events.
+
+### Grid element
+
+<img src="./images/grid.png" alt="Grid element" align="right" width="350">
+
+```json
+{
+	"type": "grid",
+	"id": "my_grid",
+	"columns": 3,
+	"elements": [
+		{ "type": "button", ... },
+		{ "type": "slider", ... },
+        ...
+	]
+}
+```
+
+Grid elements are layout containers that arrange other UI elements in a grid with a specified number of columns. Any previously mentioned element type can be nested inside a grid, including other grids.
+
+Grid elements are non-interactive and do not send any events.
 
 ## How to run locally
 
@@ -26,346 +279,3 @@ npm run build
 ```
 
 The compiled files will be output to the `dist/` folder (which gets bundled with the backend by `build.bat`).
-
-## Protocol
-
-This section describes the complete JSON protocol used by SocketUI. There are 3 types of events:
-
-### Request message
-
-This message is sent by SocketUI upon connecting or refreshing. It
-
-> `{ "type": "request" }`
-
-### Config message
-
-### Button event message
-
-### Slider event message
-
-The frontend displays UI elements based on a configuration JSON sent from the TellUs application. Each element has:
-
-- A `type` field that identifies what kind of element it is
-- An `id` field that uniquely identifies the element
-- Optional `hint_title` and `hint_text` fields that display descriptive text to the user
-- Element-specific configuration fields
-
-## UI elements
-
-### Button
-
-<img src="./images/button.png" alt="Button element" align="right">
-
-```typescript
-{
-  type: "button",
-  id: string, // Unique element id
-  text: string, // The button text
-  hint_title?: string, // Optional title about usage
-  hint_text?: string, // Optional description about usage
-  color?: string // Optional button color ("#FFFFFF")
-}
-```
-
-**Interaction:**
-When clicked, sends:
-
-```typescript
-{
-  type: "button",
-  id: string // Unique element id
-}
-```
-
-### Dropdown
-
-A dropdown select element with multiple options.
-
-**Config:**
-
-```typescript
-{
-  type: "dropdown",
-  id: string,
-  options: string[],
-  value: string,
-  hint_title?: string,
-  hint_text?: string,
-  color?: string
-}
-```
-
-- `options` - Array of available options to select from
-- `value` - The currently selected option
-- `color` - (Optional) CSS color value for the dropdown
-- `hint_title` and `hint_text` - (Optional) Descriptive text displayed to the left
-
-**Interaction:**
-When the selection changes, sends:
-
-```typescript
-{
-  type: "dropdown",
-  id: string,
-  value: string
-}
-```
-
-### Slider
-
-A single-value range input slider with customizable min, max, and step values.
-
-**Config:**
-
-```typescript
-{
-  type: "slider",
-  id: string,
-  value: number,
-  min: number,
-  max: number,
-  step?: number,
-  hint_title?: string,
-  hint_text?: string,
-  color?: string
-}
-```
-
-- `value` - The current slider value
-- `min` - Minimum allowed value
-- `max` - Maximum allowed value
-- `step` - (Optional) Step size for increments (default: 1)
-- `color` - (Optional) CSS color value for the slider track
-- `hint_title` and `hint_text` - (Optional) Descriptive text displayed to the left
-
-**Interaction:**
-When the slider is moved, sends:
-
-```typescript
-{
-  type: "slider",
-  id: string,
-  value: number
-}
-```
-
-### Ratio Slider
-
-A specialized multi-value slider that maintains a constant total while allowing you to adjust the ratio between multiple values by dragging divider knobs.
-
-**Config:**
-
-```typescript
-{
-  type: "ratio_slider",
-  id: string,
-  values: {
-    name: string,
-    value: number,
-    color: string
-  }[],
-  hint_title?: string,
-  hint_text?: string
-}
-```
-
-- `values` - Array of value objects, each containing:
-  - `name` - Label for this value segment
-  - `value` - Current numeric value
-  - `color` - CSS color value for this segment
-- `hint_title` and `hint_text` - (Optional) Descriptive text displayed to the left
-
-**Interaction:**
-When a knob is dragged, sends:
-
-```typescript
-{
-  type: "ratio_slider",
-  id: string,
-  values: number[]
-}
-```
-
-The `values` array contains the new numeric values in the same order as the configuration, with the sum always equal to the original sum.
-
-### Switch
-
-A boolean toggle switch element.
-
-**Config:**
-
-```typescript
-{
-  type: "switch",
-  id: string,
-  value: boolean,
-  hint_title?: string,
-  hint_text?: string,
-  color?: string
-}
-```
-
-- `value` - Current boolean state (true = on, false = off)
-- `color` - (Optional) CSS color value for the switch when active
-- `hint_title` and `hint_text` - (Optional) Descriptive text displayed to the left
-
-**Interaction:**
-When toggled, sends:
-
-```typescript
-{
-  type: "switch",
-  id: string,
-  value: boolean
-}
-```
-
-### Text
-
-A text-only element for displaying feedback, debug information, or section headers.
-
-**Config:**
-
-```typescript
-{
-  type: "text",
-  id: string,
-  hint_title?: string,
-  hint_text?: string
-}
-```
-
-- `hint_title` - (Optional) Bold title text displayed
-- `hint_text` - (Optional) Regular text displayed below the title
-
-**Note:** Text elements are non-interactive and do not send any events when displayed.
-
-### Horizontal Rule
-
-A visual separator element (HTML `<hr>`) used to visually separate sections.
-
-**Config:**
-
-```typescript
-{
-  type: "hr",
-  id: string,
-  hint_title?: string
-}
-```
-
-- `hint_title` - (Optional) Text displayed in the center of the horizontal rule to label the section
-
-**Note:** Hr elements are non-interactive and do not send any events.
-
-### Grid
-
-A layout container that arranges other UI elements in a grid with a specified number of columns. Any of the previously mentioned elements can be nested inside a grid.
-
-**Config:**
-
-```typescript
-{
-  type: "grid",
-  id: string,
-  columns: number,
-  elements: UiElement[]
-}
-```
-
-- `columns` - Number of columns in the grid layout
-- `elements` - Array of any UI element types (button, switch, slider, dropdown, text, hr, or even nested grids)
-
-**Example:**
-
-```json
-{
-	"type": "grid",
-	"id": "button_grid",
-	"columns": 3,
-	"elements": [
-		{ "type": "button", "id": "btn1", "text": "Button 1" },
-		{ "type": "button", "id": "btn2", "text": "Button 2" },
-		{ "type": "button", "id": "btn3", "text": "Button 3" }
-	]
-}
-```
-
-## Example Configuration
-
-Here's a complete example of a TellUs application sending a configuration to the frontend:
-
-```json
-{
-	"type": "config",
-	"title": "Interactive Globe Controls",
-	"elements": [
-		{
-			"type": "text",
-			"id": "main_title",
-			"hint_title": "Globe Mode",
-			"hint_text": "Select the visualization mode"
-		},
-		{
-			"type": "dropdown",
-			"id": "mode_selector",
-			"options": ["Continents", "Countries", "Cities"],
-			"value": "Continents"
-		},
-		{ "type": "hr", "id": "hr1", "hint_title": "Appearance" },
-		{
-			"type": "switch",
-			"id": "show_labels",
-			"value": true,
-			"color": "#3b82f6",
-			"hint_title": "Labels",
-			"hint_text": "Show location labels on globe"
-		},
-		{
-			"type": "slider",
-			"id": "rotation_speed",
-			"value": 50,
-			"min": 0,
-			"max": 100,
-			"color": "#ef4444",
-			"hint_title": "Rotation Speed"
-		},
-		{ "type": "hr", "id": "hr2", "hint_title": "Actions" },
-		{
-			"type": "grid",
-			"id": "action_buttons",
-			"columns": 2,
-			"elements": [
-				{
-					"type": "button",
-					"id": "reset",
-					"text": "Reset",
-					"color": "#6b7280"
-				},
-				{
-					"type": "button",
-					"id": "capture",
-					"text": "Capture",
-					"color": "#10b981"
-				}
-			]
-		}
-	]
-}
-```
-
-<details>
-
-<summary>Tips for collapsed sections</summary>
-
-### You can add a header
-
-You can add text within a collapsed section.
-
-You can add an image or a code block, too.
-
-```ruby
-   puts "Hello World"
-```
-
-</details>
