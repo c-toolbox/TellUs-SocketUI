@@ -1,6 +1,6 @@
 # SocketUI Frontend
 
-<img src="./images/example_ui.png" alt="Example UI" width="200", align="right">
+<img src="./images/example_ui.png" alt="Example UI" width="200" align="right">
 
 The SocketUI frontend is a dynamic, real-time control panel built with **Vite**, **React**, and **Tailwind CSS**. It communicates with the TellUs application via WebSocket to receive UI configurations and send user interactions.
 
