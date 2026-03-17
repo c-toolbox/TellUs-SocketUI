@@ -1,6 +1,6 @@
 # SocketUI Frontend
 
-<img src="./images/example_ui.png" alt="Example UI" style="width: 200px; float: right; margin-left: 1rem;">
+<img src="./images/example_ui.png" alt="Example UI" width="200", align="right">
 
 The SocketUI frontend is a dynamic, real-time control panel built with **Vite**, **React**, and **Tailwind CSS**. It communicates with the TellUs application via WebSocket to receive UI configurations and send user interactions.
 
@@ -12,7 +12,7 @@ This section describes the complete JSON protocol used by SocketUI. There are 3 
 
 A **request message** is sent by SocketUI frontend upon connecting or refreshing. The message gets sent to the TellUs application, requesting it to send a **config message** back.
 
-```json
+```jsonc
 {
 	"type": "request"
 }
@@ -24,7 +24,7 @@ A **config message** is sent by the TellUs application to specify what UI elemen
 
 See [UI elements](#ui-elements) for more details about all available elements and their configuration.
 
-```json
+```jsonc
 {
     "type": "config",
     "title": "My config", // Optional title at the top
@@ -45,7 +45,7 @@ The `type` and `id` properties in an event message matches the type and id of an
 
 In event messages, the `type` and `id` properties correspond to the type and id of an element in the config. The `value` property is included for modifiable elements and its type depents on the type of element. A slider has a numeric value, a dropdown has a string value, a switch has a boolean value.
 
-```json
+```jsonc
 {
 	"type": "dropdown", // The type of UI element interacted with
 	"id": "favorite_fruit", // Unique element id
@@ -63,7 +63,7 @@ Each element requires a unique `id` to track interactions.
 
 <img src="./images/button.png" alt="Button element" align="right" width="350">
 
-```json
+```jsonc
 {
 	"type": "button",
 	"id": "my_button",
@@ -78,7 +78,7 @@ Each element requires a unique `id` to track interactions.
 
 When a button is clicked, SocketUI sends:
 
-```json
+```jsonc
 {
 	"type": "button",
 	"id": "my_button"
@@ -89,7 +89,7 @@ When a button is clicked, SocketUI sends:
 
 <img src="./images/switch.png" alt="Switch element" align="right" width="350">
 
-```json
+```jsonc
 {
 	"type": "switch",
 	"id": "my_switch",
@@ -104,7 +104,7 @@ When a button is clicked, SocketUI sends:
 
 When toggled, SocketUI sends:
 
-```json
+```jsonc
 {
 	"type": "switch",
 	"id": "my_switch",
@@ -116,7 +116,7 @@ When toggled, SocketUI sends:
 
 <img src="./images/dropdown.png" alt="Dropdown element" align="right" width="350">
 
-```json
+```jsonc
 {
 	"type": "dropdown",
 	"id": "my_dropdown",
@@ -132,7 +132,7 @@ When toggled, SocketUI sends:
 
 When the selection changes, SocketUI sends:
 
-```json
+```jsonc
 {
 	"type": "dropdown",
 	"id": "my_dropdown",
@@ -144,7 +144,7 @@ When the selection changes, SocketUI sends:
 
 <img src="./images/slider.png" alt="Slider element" align="right" width="350">
 
-```json
+```jsonc
 {
 	"type": "slider",
 	"id": "my_slider",
@@ -162,7 +162,7 @@ When the selection changes, SocketUI sends:
 
 When the slider is moved, SocketUI sends:
 
-```json
+```jsonc
 {
 	"type": "slider",
 	"id": "my_slider",
@@ -174,7 +174,7 @@ When the slider is moved, SocketUI sends:
 
 <img src="./images/ratio_slider.png" alt="Ratio slider element" align="right" width="350">
 
-```json
+```jsonc
 {
 	"type": "ratio_slider",
 	"id": "my_ratio_slider",
@@ -197,7 +197,7 @@ The ratio slider element is a multi-slider, allowing you to specify the ratio be
 
 When a knob is dragged, SocketUI sends:
 
-```json
+```jsonc
 {
 	"type": "ratio_slider",
 	"id": "my_ratio_slider",
@@ -209,7 +209,7 @@ When a knob is dragged, SocketUI sends:
 
 <img src="./images/text.png" alt="Text element" align="right" width="350">
 
-```json
+```jsonc
 {
 	"type": "text",
 	"id": "my_text",
@@ -226,7 +226,7 @@ Text elements are non-interactive and do not send any events.
 
 <img src="./images/hr.png" alt="HR element" align="right" width="350">
 
-```json
+```jsonc
 {
 	"type": "hr",
 	"id": "my_hr",
@@ -242,7 +242,7 @@ HR elements are non-interactive and do not send any events.
 
 <img src="./images/grid.png" alt="Grid element" align="right" width="350">
 
-```json
+```jsonc
 {
 	"type": "grid",
 	"id": "my_grid",
