@@ -28,5 +28,6 @@ dist-ssr
 *.manifest
 *.spec
 *.ini
+*.zip
 build/
 dist/

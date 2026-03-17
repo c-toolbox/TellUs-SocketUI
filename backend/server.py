@@ -44,12 +44,12 @@ class ConnectionManager:
         await websocket.accept()
         async with self.lock:
             self.active_connections.add(websocket)
-        print("Client connected")
+        print("> Client connected")
 
     async def disconnect(self, websocket: WebSocket):
         async with self.lock:
             self.active_connections.discard(websocket)
-        print("Client disconnected")
+        print("> Client disconnected")
 
     async def broadcast(self, message: str, sender: WebSocket):
         async with self.lock:
