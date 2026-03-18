@@ -280,12 +280,14 @@ HR elements are non-interactive and does not require an `id`, nor sends any even
 
 Grid elements are layout containers that arrange other UI elements in a grid with a specified number of columns. Any previously mentioned element type can be nested inside a grid, including other grids.
 
+Grid cells have a minimum width to avoid squishing. Therefore, on narrow devices, the grid columns will be automatically limited to 2 or 3.
+
 <img src="./images/grid.png" alt="Grid element" align="right" width="350">
 
 ```jsonc
 {
 	"type": "grid",
-	"columns": 3,
+	"columns": 2, // 2 or 3 columns works best
 	"elements": [
 		{ "type": "button", ... },
 		{ "type": "slider", ... },

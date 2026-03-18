@@ -13,7 +13,7 @@ export function UiGrid(props: UiGridConfig & { children?: ReactNode }) {
 			<div
 				className="w-full grid gap-2"
 				style={{
-					gridTemplateColumns: `repeat(${props.columns ?? 2}, minmax(0, 1fr))`,
+					gridTemplateColumns: `repeat(auto-fit, minmax(max(200px, ${100 / props.columns}% - 8px), 1fr))`,
 				}}
 			>
 				{props.children}
