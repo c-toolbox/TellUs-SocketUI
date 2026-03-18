@@ -37,14 +37,16 @@ export function UiColor(
 					fileInputRef.current?.click();
 				}}
 			>
-				<span className="inline-block w-[7ch] text-center">
-					{color}
-				</span>
+				<span className="inline-block w-[7ch] text-center">{color}</span>
 				<input
 					type="color"
 					ref={fileInputRef}
 					value={color}
-					onChange={(e) => setColor(e.target.value)}
+					onChange={(e) => {
+						const newValue = e.target.value;
+						setColor(newValue);
+						props.onChange(newValue);
+					}}
 					className="invisible absolute left-0 bottom-0 h-0 w-0"
 				/>
 			</button>
