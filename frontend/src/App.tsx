@@ -80,11 +80,7 @@ export default function App() {
 		case "CONNECTING":
 			return (
 				<div className="panel">
-					<UiText
-						type="text"
-						id="connecting"
-						hint_title="Connecting to SocketUi..."
-					/>
+					<UiText type="text" hint_title="Connecting to SocketUi..." />
 				</div>
 			);
 
@@ -114,7 +110,6 @@ export default function App() {
 					<div className="panel">
 						<UiText
 							type="text"
-							id="quiet"
 							hint_title="It's quiet."
 							hint_text="No application is currently connected to SocketUi."
 						/>
@@ -134,8 +129,8 @@ export default function App() {
 				<>
 					<h1>{config.title}</h1>
 					<div className="panel">
-						{config.elements.map((element: UiElement) =>
-							getComponent(element, sendData),
+						{config.elements.map((element: UiElement, index: number) =>
+							getComponent(element, sendData, index),
 						)}
 					</div>
 				</>
@@ -143,7 +138,11 @@ export default function App() {
 	}
 }
 
-function getComponent(element: UiElement, sendData: (data: UiEvent) => void) {
+function getComponent(
+	element: UiElement,
+	sendData: (data: UiEvent) => void,
+	index: number,
+) {
 	switch (element.type) {
 		case "button":
 			return (
@@ -177,7 +176,7 @@ function getComponent(element: UiElement, sendData: (data: UiEvent) => void) {
 			);
 
 		case "hr":
-			return <UiHr key={element.id} {...element} />;
+			return <UiHr key={index} {...element} />;
 
 		case "ratio_slider":
 			return (
@@ -217,17 +216,17 @@ function getComponent(element: UiElement, sendData: (data: UiEvent) => void) {
 			);
 
 		case "text":
-			return <UiText key={element.id} {...element} />;
+			return <UiText key={index} {...element} />;
 
 		case "grid":
 			return (
-				<UiGrid key={element.id} {...element}>
-					{element.elements.map((element: UiElement) => (
+				<UiGrid key={index} {...element}>
+					{element.elements.map((element: UiElement, subindex: number) => (
 						<div
-							key={element.id}
-							className="border border-zinc-700 rounded-lg p-3"
+							key={100 * index + subindex}
+							className="border border-zinc-700 rounded-lg p-3 flex"
 						>
-							{getComponent(element, sendData)}
+							{getComponent(element, sendData, 100 * index + subindex)}
 						</div>
 					))}
 				</UiGrid>

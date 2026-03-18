@@ -250,13 +250,12 @@ Text elements can be used to send feedback to the user about the state of the Te
 ```jsonc
 {
 	"type": "text",
-	"id": "my_text",
 	"hint_title": "Text title", // Optional
 	"hint_text": "Text content", // Optional
 }
 ```
 
-Text elements are non-interactive and do not send any events.
+Text elements are non-interactive and does not require an `id`, nor sends any events.
 
 ---
 
@@ -269,12 +268,11 @@ HR elements can be used to add separation between sections of UI elements.
 ```jsonc
 {
 	"type": "hr",
-	"id": "my_hr",
 	"hint_title": "Section label", // Optional label
 }
 ```
 
-HR elements are non-interactive and do not send any events.
+HR elements are non-interactive and does not require an `id`, nor sends any events.
 
 ---
 
@@ -287,7 +285,6 @@ Grid elements are layout containers that arrange other UI elements in a grid wit
 ```jsonc
 {
 	"type": "grid",
-	"id": "my_grid",
 	"columns": 3,
 	"elements": [
 		{ "type": "button", ... },
@@ -297,7 +294,7 @@ Grid elements are layout containers that arrange other UI elements in a grid wit
 }
 ```
 
-Grid elements are non-interactive and do not send any events.
+Grid elements are non-interactive and does not require an `id`, nor sends any events.
 
 ## How to run locally
 

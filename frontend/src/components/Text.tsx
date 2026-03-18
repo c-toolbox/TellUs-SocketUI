@@ -1,6 +1,5 @@
 export interface UiTextConfig {
 	type: "text";
-	id: string;
 	hint_title?: string;
 	hint_text?: string;
 }

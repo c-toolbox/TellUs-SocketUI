@@ -1,6 +1,5 @@
 export interface UiHrConfig {
 	type: "hr";
-	id: string;
 	hint_title?: string;
 }
 

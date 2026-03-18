@@ -43,5 +43,5 @@ select {
 }
 
 .element {
-	@apply flex justify-between items-center gap-4;
+	@apply grow flex justify-between items-center gap-4;
 }

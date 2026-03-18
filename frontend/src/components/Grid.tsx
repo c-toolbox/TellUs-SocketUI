@@ -3,7 +3,6 @@ import { UiElement } from "../protocol";
 
 export interface UiGridConfig {
 	type: "grid";
-	id: string;
 	columns: number;
 	elements: UiElement[];
 }
