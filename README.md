@@ -2,7 +2,7 @@
 
 <img src="./frontend/images/overview.png" alt="SocketUI on the left controlling settings in a TellUs paint application">
 
-SocketUI is a remote control system that allows users to control TellUs applications from their smartphone over a local network.
+SocketUI is a remote-control system that allows users to control TellUs applications from their smartphone over a local network.
 
 ## Project Structure
 
