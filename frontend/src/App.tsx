@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { UiEvent, UiConfigEvent, UiElement } from "./protocol";
 import { UiButton } from "./components/Button";
+import { UiMultiButton } from "./components/MultiButton";
 import { UiColor } from "./components/Color";
 import { UiDropdown } from "./components/Dropdown";
 import { UiHr } from "./components/Hr";
@@ -150,6 +151,20 @@ function getComponent(
 					key={element.id}
 					{...element}
 					onClick={() => sendData({ type: "button", id: element.id })}
+				/>
+			);
+
+		case "multi_button":
+			return (
+				<UiMultiButton
+					key={index}
+					{...element}
+					onClick={(id: string) =>
+						sendData({
+							type: "multi_button",
+							id,
+						})
+					}
 				/>
 			);
 

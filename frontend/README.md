@@ -85,6 +85,39 @@ When a button is clicked, SocketUI sends:
 
 ---
 
+### Multi-button element
+
+<img src="./images/multi_button.png" alt="Multi-button element" align="right" width="350">
+
+```jsonc
+{
+	"type": "multi_button",
+	"buttons": [
+		{
+			"id": "my_button",
+			"text": "Button",
+			"color": "#ffffff", // Optional
+		},
+		...
+	],
+	"hint_title": "Multi-button title", // Optional
+	"hint_text": "Description about the buttons.", // Optional
+}
+```
+
+#### Multi-button event message
+
+When one of the buttons is clicked, SocketUI sends:
+
+```jsonc
+{
+	"type": "multi_button",
+	"id": "my_button",
+}
+```
+
+---
+
 ### Switch element
 
 <img src="./images/switch.png" alt="Switch element" align="right" width="350">
