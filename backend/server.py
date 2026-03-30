@@ -119,7 +119,7 @@ async def websocket_endpoint(websocket: WebSocket):
 def run_server():
     uvicorn.run(
         app,
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=7000,
         reload=False,
         workers=1,
@@ -133,7 +133,7 @@ def run_server():
 
 
 def open_ui(icon, item):
-    webbrowser.open("http://127.0.0.1:7000")
+    webbrowser.open("http://0.0.0.0:7000")
 
 
 def quit_app(icon, item):
