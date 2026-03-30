@@ -81,7 +81,7 @@ export default function App() {
 		case "CONNECTING":
 			return (
 				<div className="panel">
-					<UiText type="text" hint_title="Connecting to SocketUi..." />
+					<UiText type="text" hint_title="Connecting to SocketUI..." />
 				</div>
 			);
 
@@ -96,7 +96,7 @@ export default function App() {
 							id="reconnect"
 							text="Reconnect"
 							hint_title="Connection lost"
-							hint_text="Click to attempt to reconnect to the server."
+							hint_text="Click to attempt to reconnect to SocketUI."
 							onClick={connectToServer}
 						/>
 					</div>
@@ -112,7 +112,7 @@ export default function App() {
 						<UiText
 							type="text"
 							hint_title="It's quiet."
-							hint_text="No application is currently connected to SocketUi."
+							hint_text="No application is currently connected to SocketUI."
 						/>
 						<UiButton
 							type="button"

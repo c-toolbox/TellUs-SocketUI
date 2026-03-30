@@ -1,11 +1,13 @@
-import asyncio, json, os, sys
+import asyncio, json, logging, os, sys, threading, uvicorn, webbrowser
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-import uvicorn
+from pystray import Icon, Menu, MenuItem
+from PIL import Image
+
 
 # -------------------------
-# App setup
+# Helpers
 # -------------------------
 
 
@@ -15,9 +17,24 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 
+# -------------------------
+# Logging (safe for --noconsole)
+# -------------------------
+
+logging.basicConfig(
+    filename="socketui.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+
+
+# -------------------------
+# App setup
+# -------------------------
+
 app = FastAPI()
 
-# Serve frontend
+# Serve frontend assets
 app.mount(
     "/assets",
     StaticFiles(directory=resource_path(os.path.join("dist", "assets"))),
@@ -44,12 +61,12 @@ class ConnectionManager:
         await websocket.accept()
         async with self.lock:
             self.active_connections.add(websocket)
-        print("> Client connected")
+        logging.info("Client connected")
 
     async def disconnect(self, websocket: WebSocket):
         async with self.lock:
             self.active_connections.discard(websocket)
-        print("> Client disconnected")
+        logging.info("Client disconnected")
 
     async def broadcast(self, message: str, sender: WebSocket):
         async with self.lock:
@@ -66,6 +83,7 @@ class ConnectionManager:
 
 
 manager = ConnectionManager()
+
 
 # -------------------------
 # WebSocket endpoint
@@ -94,15 +112,61 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 # -------------------------
-# Run server
+# Server runner
+# -------------------------
+
+
+def run_server():
+    uvicorn.run(
+        app,
+        host="127.0.0.1",
+        port=7000,
+        reload=False,
+        workers=1,
+        log_config=None,
+    )
+
+
+# -------------------------
+# Tray actions
+# -------------------------
+
+
+def open_ui(icon, item):
+    webbrowser.open("http://127.0.0.1:7000")
+
+
+def quit_app(icon, item):
+    icon.stop()
+    os._exit(0)
+
+
+def create_tray():
+    icon_path = resource_path(os.path.join("dist", "icon.ico"))
+
+    # Fallback if icon missing
+    if not os.path.exists(icon_path):
+        image = Image.new("RGB", (64, 64), color=(0, 0, 0))
+    else:
+        image = Image.open(icon_path)
+
+    menu = Menu(
+        MenuItem("Open", open_ui),
+        MenuItem("Quit", quit_app),
+    )
+
+    icon = Icon("SocketUI", image, "SocketUI", menu)
+    icon.run()
+
+
+# -------------------------
+# Entry point
 # -------------------------
 
 if __name__ == "__main__":
-    uvicorn.run(
-        # "server:app",
-        app,
-        host="0.0.0.0",
-        port=7000,
-        reload=False,
-        workers=1,  # IMPORTANT for ordering
-    )
+    logging.info("Starting SocketUI...")
+
+    server_thread = threading.Thread(target=run_server, daemon=True)
+    server_thread.start()
+
+    create_tray()

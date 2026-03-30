@@ -1,11 +1,11 @@
 @echo off
 setlocal
 
-:: 1. Build the React frontend
-echo.
-echo === Building React Frontend ===
+
+echo === Building SocketUI Frontend ===
+
 cd frontend
-call npm run install
+call npm install
 call npm run build
 if %errorlevel% neq 0 (
     echo [ERROR] npm build failed.
@@ -13,27 +13,31 @@ if %errorlevel% neq 0 (
 )
 cd ..
 
-:: 2. Copy frontend build into backend
+
 echo.
 echo === Copying frontend dist to backend ===
+
 if exist backend\dist rmdir /s /q backend\dist
 xcopy "frontend\dist" "backend\dist" /E /I /Y
 
-:: 3. Build backend executable
-echo.
-cd backend
 
+echo.
 echo === Installing Python dependencies ===
+
+cd backend
 pip install -r requirements.txt
 
+
+echo.
 echo === Building executable ===
+
 python -m PyInstaller server.py ^
  --onefile ^
- --noconsole
+ --noconsole ^
  --name SocketUI ^
  --add-data "dist;dist" ^
  --icon dist\icon.ico ^
- --distpath dist ^
+ --distpath ..\SocketUI ^
  --workpath build
 
 if %errorlevel% neq 0 (
@@ -43,12 +47,14 @@ if %errorlevel% neq 0 (
 
 cd ..
 
-:: 4. Create zip in root
+
 echo.
 echo === Creating zip ===
+
 if exist SocketUI.zip del SocketUI.zip
 
-powershell -command "Compress-Archive -Path 'backend\dist\*' -DestinationPath 'SocketUI.zip'"
+powershell -command "Compress-Archive -Path 'SocketUI\*' -DestinationPath 'SocketUI.zip'"
+
 
 echo.
 echo === Build Complete ===
