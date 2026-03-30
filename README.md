@@ -66,13 +66,18 @@ This script:
 1. Builds the React frontend
 2. Moves the compiled frontend into the backend directory
 3. Packages everything with PyInstaller to create `backend/dist/SocketUI.exe`
-4. Creates `SocketUI.zip` for distribution
+4. Creates `SocketUI/` and `SocketUI.zip` for distribution
 
 ## Installation on TellUs Computer
 
-1. **Build SocketUI** using `build.bat` (see above)
-2. **Move the zip** containing `SocketUI.exe` to `C:\` or another permanent location on the TellUs computer, then extract the zip
-3. **Add to Windows Startup** to ensure SocketUI runs automatically:
-   - Press `Win + R`, type `shell:startup`, and press Enter
+<img src="./frontend/images/tray.png" alt="Multi-button element" align="right" width="350">
+
+1. Build SocketUI using `build.bat`
+2. Move `SocketUI.exe` to a permanent location
+3. Add to Windows Startup to run SocketUI automatically:
+   - Press `Win + R` and type `shell:startup`
    - Create a shortcut to `SocketUI.exe` in the startup folder
-4. **SocketUI is now ready** - it will run in the background on port 7000 whenever a compatible TellUs application connects
+   - Run `SocketUI.exe`
+4. SocketUI is now running is the system tray applications
+   - Right-click and select "Open" to visit <localhost:7000>
+   - Right-click and select "Quit" to close SocketUI

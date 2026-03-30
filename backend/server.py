@@ -133,7 +133,7 @@ def run_server():
 
 
 def open_ui(icon, item):
-    webbrowser.open("http://0.0.0.0:7000")
+    webbrowser.open("http://localhost:7000")
 
 
 def quit_app(icon, item):

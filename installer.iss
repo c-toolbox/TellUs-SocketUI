@@ -9,7 +9,7 @@ Compression=lzma
 SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64
 PrivilegesRequired=lowest
-SetupIconFile=SocketUI\icon.ico
+SetupIconFile=frontend\public\icon.ico
 
 [Files]
 Source: "SocketUI\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
