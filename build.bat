@@ -5,6 +5,7 @@ setlocal
 echo.
 echo === Building React Frontend ===
 cd frontend
+call npm run install
 call npm run build
 if %errorlevel% neq 0 (
     echo [ERROR] npm build failed.
@@ -26,8 +27,9 @@ echo === Installing Python dependencies ===
 pip install -r requirements.txt
 
 echo === Building executable ===
-pyinstaller server.py ^
+python -m PyInstaller server.py ^
  --onefile ^
+ --noconsole
  --name SocketUI ^
  --add-data "dist;dist" ^
  --icon dist\icon.ico ^
