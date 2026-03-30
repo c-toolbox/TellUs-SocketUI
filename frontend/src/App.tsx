@@ -161,7 +161,7 @@ function getComponent(
 					{...element}
 					onClick={(id: string) =>
 						sendData({
-							type: "multi_button",
+							type: "button",
 							id,
 						})
 					}

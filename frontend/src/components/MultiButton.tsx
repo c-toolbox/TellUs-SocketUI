@@ -9,11 +9,6 @@ export interface UiMultiButtonConfig {
 	hint_text?: string;
 }
 
-export interface UiMultiButtonEvent {
-	type: "multi_button";
-	id: string;
-}
-
 export function UiMultiButton(
 	props: UiMultiButtonConfig & {
 		onClick?: (id: string, index: number) => void;

@@ -107,11 +107,11 @@ When a button is clicked, SocketUI sends:
 
 #### Multi-button event message
 
-When one of the buttons is clicked, SocketUI sends:
+When one of the buttons is clicked, SocketUI sends a [button event message](#button-event-message):
 
 ```jsonc
 {
-	"type": "multi_button",
+	"type": "button",
 	"id": "my_button",
 }
 ```
