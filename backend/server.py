@@ -21,8 +21,18 @@ def resource_path(relative_path):
 # Logging (safe for --noconsole)
 # -------------------------
 
+
+def get_log_path():
+    base = os.getenv("LOCALAPPDATA") or os.path.expanduser("~")
+    log_dir = os.path.join(base, "SocketUI")
+
+    os.makedirs(log_dir, exist_ok=True)
+
+    return os.path.join(log_dir, "socketui.log")
+
+
 logging.basicConfig(
-    filename="socketui.log",
+    filename=get_log_path(),
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )

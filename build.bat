@@ -4,6 +4,9 @@ setlocal
 
 echo === Building SocketUI Frontend ===
 
+if exist SocketUI rmdir /s /q SocketUI
+if exist SocketUI.zip del SocketUI.zip
+
 cd frontend
 call npm install
 call npm run build
@@ -50,8 +53,6 @@ cd ..
 
 echo.
 echo === Creating zip ===
-
-if exist SocketUI.zip del SocketUI.zip
 
 powershell -command "Compress-Archive -Path 'SocketUI\*' -DestinationPath 'SocketUI.zip'"
 
