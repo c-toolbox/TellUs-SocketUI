@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build & Release Executable
+    name: Build & Release Installer
     runs-on: windows-latest
 
     steps:
@@ -30,25 +30,36 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install fastapi uvicorn pyinstaller
+          python -m pip install -r backend/requirements.txt
 
       - name: Build Frontend
         run: |
           cd frontend
           npm install
           npm run build
-          Move-Item -Path dist -Destination ..\backend\dist -Force
+          if (Test-Path ..\backend\dist) { Remove-Item -Recurse -Force ..\backend\dist }
+          Copy-Item -Path dist -Destination ..\backend\dist -Recurse -Force
 
-      - name: Package with PyInstaller
+      - name: Build Executable with PyInstaller
         run: |
           cd backend
-          pyinstaller --onefile --noconsole --add-data "dist;dist" --name SocketUI server.py
+          python -m PyInstaller server.py `
+            --onefile `
+            --noconsole `
+            --name SocketUI `
+            --add-data "dist;dist" `
+            --icon dist\icon.ico `
+            --distpath ..\SocketUI `
+            --workpath build
 
       - name: Create Zip Package
         run: |
-          New-Item -ItemType Directory -Path SocketUI -Force
-          Copy-Item -Path backend\dist\SocketUI.exe -Destination SocketUI\
           Compress-Archive -Path SocketUI\* -DestinationPath SocketUI.zip -Force
+
+      - name: Compile Inno Setup Installer
+        uses: ammaraskar/inno-setup-action@v2
+        with:
+          filepath: installer.iss
 
       - name: Create or update rolling release
         uses: marvinpinto/action-automatic-releases@latest
@@ -58,4 +69,5 @@ jobs:
           prerelease: false
           title: "SocketUI - Latest Build"
           files: |
+            SocketUI-Installer.exe
             SocketUI.zip
