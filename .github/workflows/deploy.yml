@@ -57,7 +57,7 @@ jobs:
           Compress-Archive -Path SocketUI\* -DestinationPath SocketUI.zip -Force
 
       - name: Compile Inno Setup Installer
-        uses: ammaraskar/inno-setup-action@v2
+        uses: robin24/inno-setup-action@v1
         with:
           filepath: installer.iss
 
