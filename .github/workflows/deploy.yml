@@ -48,7 +48,7 @@ jobs:
             --noconsole `
             --name SocketUI `
             --add-data "dist;dist" `
-            --icon dist\icon.ico `
+            --icon ..\frontend\public\icon.ico `
             --distpath ..\SocketUI `
             --workpath build
 
