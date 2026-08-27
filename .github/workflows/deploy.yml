@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build & Release Installer
+    name: Build & Release
     runs-on: windows-latest
 
     steps:
@@ -52,14 +52,14 @@ jobs:
             --distpath ..\SocketUI `
             --workpath build
 
-      - name: Create Zip Package
-        run: |
-          Compress-Archive -Path SocketUI\* -DestinationPath SocketUI.zip -Force
-
       - name: Compile Inno Setup Installer
         uses: robin24/inno-setup-action@v1
         with:
           filepath: installer.iss
+
+      - name: Create Zip Package
+        run: |
+          Compress-Archive -Path SocketUI\* -DestinationPath SocketUI.zip -Force
 
       - name: Create or update rolling release
         uses: marvinpinto/action-automatic-releases@latest
@@ -69,5 +69,4 @@ jobs:
           prerelease: false
           title: "SocketUI - Latest Build"
           files: |
-            SocketUI-Installer.exe
             SocketUI.zip

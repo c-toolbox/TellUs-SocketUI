@@ -2,9 +2,9 @@
 AppName=SocketUI
 AppVersion=1.0
 DefaultDirName={autopf}\SocketUI
-DefaultGroupName=SocketUI
-OutputDir=.
-OutputBaseFilename=SocketUI-Installer
+DisableProgramGroupPage=yes
+OutputDir=SocketUI
+OutputBaseFilename=SocketUI Installer
 Compression=lzma
 SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64
@@ -12,10 +12,7 @@ PrivilegesRequired=lowest
 SetupIconFile=frontend\public\icon.ico
 
 [Files]
-Source: "SocketUI\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
-
-[Icons]
-Name: "{group}\SocketUI"; Filename: "{app}\SocketUI.exe"
+Source: "SocketUI\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs; Excludes: "SocketUI Installer.exe"
 
 [Tasks]
 Name: "startup"; Description: "Start SocketUI when Windows starts"; Flags: unchecked
