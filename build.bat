@@ -40,6 +40,9 @@ python -m PyInstaller server.py ^
  --name SocketUI ^
  --add-data "dist;dist" ^
  --icon dist\icon.ico ^
+ --hidden-import websockets `
+ --hidden-import websockets.legacy `
+ --hidden-import websockets.legacy.server `
  --distpath ..\SocketUI ^
  --workpath build
 

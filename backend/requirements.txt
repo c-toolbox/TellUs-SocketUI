@@ -1,5 +1,6 @@
 pyinstaller
 fastapi
 uvicorn
+websockets
 pystray
 pillow

@@ -49,6 +49,9 @@ jobs:
             --name SocketUI `
             --add-data "dist;dist" `
             --icon ..\frontend\public\icon.ico `
+            --hidden-import websockets `
+            --hidden-import websockets.legacy `
+            --hidden-import websockets.legacy.server `
             --distpath ..\SocketUI `
             --workpath build
 
