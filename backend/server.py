@@ -44,17 +44,25 @@ logging.basicConfig(
 
 app = FastAPI()
 
-# Serve frontend assets
-app.mount(
-    "/assets",
-    StaticFiles(directory=resource_path(os.path.join("dist", "assets"))),
-    name="assets",
-)
+# Locate compiled frontend folder inside sys._MEIPASS or local directory
+frontend_dist = resource_path("dist")
+
+# Serve assets if folder exists
+assets_dir = os.path.join(frontend_dist, "assets")
+if os.path.exists(assets_dir):
+    app.mount(
+        "/assets",
+        StaticFiles(directory=assets_dir),
+        name="assets",
+    )
 
 
 @app.get("/")
 async def index():
-    return FileResponse(resource_path(os.path.join("dist", "index.html")))
+    index_path = os.path.join(frontend_dist, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return {"error": "Frontend build files not found."}
 
 
 # -------------------------
@@ -88,7 +96,8 @@ class ConnectionManager:
 
             try:
                 await connection.send_text(message)
-            except Exception:
+            except Exception as e:
+                logging.error(f"Error sending message: {e}")
                 await self.disconnect(connection)
 
 
@@ -118,6 +127,9 @@ async def websocket_endpoint(websocket: WebSocket):
             await manager.broadcast(json.dumps(data), sender=websocket)
 
     except WebSocketDisconnect:
+        await manager.disconnect(websocket)
+    except Exception as e:
+        logging.error(f"WebSocket exception: {e}")
         await manager.disconnect(websocket)
 
 
@@ -152,13 +164,19 @@ def quit_app(icon, item):
 
 
 def create_tray():
-    icon_path = resource_path(os.path.join("dist", "icon.ico"))
-
-    # Fallback if icon missing
+    # Look for icon inside bundled dist or root
+    icon_path = os.path.join(frontend_dist, "icon.ico")
     if not os.path.exists(icon_path):
-        image = Image.new("RGB", (64, 64), color=(0, 0, 0))
+        icon_path = resource_path(os.path.join("frontend", "public", "icon.ico"))
+
+    if os.path.exists(icon_path):
+        try:
+            image = Image.open(icon_path)
+        except Exception as e:
+            logging.error(f"Failed to load icon: {e}")
+            image = Image.new("RGB", (64, 64), color=(0, 0, 0))
     else:
-        image = Image.open(icon_path)
+        image = Image.new("RGB", (64, 64), color=(0, 0, 0))
 
     menu = Menu(
         MenuItem("Open", open_ui),
